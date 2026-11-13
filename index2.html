@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Password Tool by iLucker01</title>
+    <style>
+        :root {
+            --bg-main: #0b0e14;
+            --bg-card: #151b26;
+            --bg-card-hover: #1c2433;
+            --primary: #00f0ff;
+            --secondary: #7000ff;
+            --accent: #ff0055;
+            --success: #00e676;
+            --warning: #ffab00;
+            --danger: #ff1744;
+            --text-main: #f0f4f8;
+            --text-muted: #94a3b8;
+            --border: #263042;
+            --radius: 14px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.08), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(112, 0, 255, 0.08), transparent 35%);
+        }
+
+        header {
+            background: rgba(21, 27, 38, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            max-width: 800px;
+            width: 100%;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .output-box {
+            display: flex;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .output-box input {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-family: monospace;
+            padding: 1rem;
+            width: 100%;
+            outline: none;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--primary), #00b8d4);
+            color: #05080f;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary {
+            background: var(--bg-card-hover);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .range-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type="range"] {
+            width: 65%;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* STRENGTH TESTER */
+        .strength-meter-bar {
+            width: 100%;
+            height: 8px;
+            background: #263042;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        🛡️ Cyber Password Tool
+        <span class="author-tag">Vytvoril: iLucker01 (Len pre zábavu!)</span>
+    </div>
+</header>
+
+<main>
+    <!-- GENERÁTOR HESIEL -->
+    <div class="card">
+        <h2>⚡ Generátor Silných Hesiel</h2>
+        <p>Vytvor si bezpečné a náhodné heslo jedným kliknutím.</p>
+        
+        <div class="output-box">
+            <input type="text" id="generated-password" readonly placeholder="Klikni na generovať...">
+            <button class="btn" onclick="copyPassword()" style="border-radius: 0;">Kopírovať</button>
+        </div>
+
+        <div class="controls">
+            <div class="range-group">
+                <span>Dĺžka hesla: <strong id="length-val" style="color:var(--primary)">16</strong> znakov</span>
+                <input type="range" id="length-range" min="6" max="32" value="16" oninput="updateLength()">
+            </div>
+            
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="chk-upper" checked> Veľké písmená (A-Z)</label>
+                <label><input type="checkbox" id="chk-lower" checked> Malé písmená (a-z)</label>
+                <label><input type="checkbox" id="chk-num" checked> Čísla (0-9)</label>
+                <label><input type="checkbox" id="chk-sym" checked> Špeciálne znaky (!@#)</label>
+            </div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="generatePassword()">Generovať nové heslo</button>
+    </div>
+
+    <!-- TESTER SILY HESLA -->
+    <div class="card">
+        <h2>🔍 Tester Sily Hesla</h2>
+        <p>Napíš sem akékoľvek heslo a zisti, ako rýchlo by ho dokázali hackeri prelomiť.</p>
+        
+        <div style="margin-bottom: 1rem;">
+            <input type="text" id="test-input" placeholder="Zadaj heslo na otestovanie..." oninput="analyzePassword()">
+        </div>
+
+        <div class="strength-meter-bar">
+            <div id="strength-fill" class="strength-fill"></div>
+        </div>
+        
+        <div class="strength-info">
+            <span>Bezpečnosť: <strong id="strength-text" style="color:var(--text-main)">Zadaj heslo</strong></span>
+            <span>Odhad prelomenia: <strong id="crack-time" style="color:var(--primary)">--</strong></span>
+        </div>
+    </div>
+</main>
+
+<footer>
+    Cyber Password Tool • Vytvoril iLucker01 • Všetky práva vyhradené
+</footer>
+
+<script>
+    // GENERATOR LOGIKA
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const numberChars = '0123456789';
+    const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    function updateLength() {
+        const val = document.getElementById('length-range').value;
+        document.getElementById('length-val').textContent = val;
+        generatePassword();
+    }
+
+    function generatePassword() {
+        let chars = '';
+        if (document.getElementById('chk-upper').checked) chars += uppercaseChars;
+        if (document.getElementById('chk-lower').checked) chars += lowercaseChars;
+        if (document.getElementById('chk-num').checked) chars += numberChars;
+        if (document.getElementById('chk-sym').checked) chars += symbolChars;
+
+        const length = document.getElementById('length-range').value;
+        let password = '';
+
+        if (chars === '') {
+            document.getElementById('generated-password').value = 'Vyber aspoň jednu možnosť!';
+            return;
+        }
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            password += chars[randomIndex];
+        }
+
+        document.getElementById('generated-password').value = password;
+    }
+
+    function copyPassword() {
+        const pwdField = document.getElementById('generated-password');
+        if (!pwdField.value || pwdField.value.includes('Vyber')) return;
+        navigator.clipboard.writeText(pwdField.value);
+        alert('Heslo skopírované do schránky!');
+    }
+
+    // ANALYZER LOGIKA
+    function analyzePassword() {
+        const pwd = document.getElementById('test-input').value;
+        const fill = document.getElementById('strength-fill');
+        const text = document.getElementById('strength-text');
+        const time = document.getElementById('crack-time');
+
+        if (pwd.length === 0) {
+            fill.style.width = '0%';
+            text.textContent = 'Zadaj heslo';
+            time.textContent = '--';
+            return;
+        }
+
+        let score = 0;
+        if (pwd.length >= 8) score += 1;
+        if (pwd.length >= 12) score += 1;
+        if (pwd.length >= 16) score += 1;
+        if (/[A-Z]/.test(pwd)) score += 1;
+        if (/[0-9]/.test(pwd)) score += 1;
+        if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+
+        let width = (score / 6) * 100;
+        fill.style.width = `${Math.min(100, width)}%`;
+
+        if (score <= 2) {
+            fill.style.backgroundColor = 'var(--danger)';
+            text.textContent = 'Slabé ❌';
+            text.style.color = 'var(--danger)';
+            time.textContent = 'Za pár sekúnd';
+        } else if (score <= 4) {
+            fill.style.backgroundColor = 'var(--warning)';
+            text.textContent = 'Stredné ⚠️';
+            text.style.color = 'var(--warning)';
+            time.textContent = 'Niekoľko hodin / dní';
+        } else if (score === 5) {
+            fill.style.backgroundColor = 'var(--primary)';
+            text.textContent = 'Silné ✅';
+            text.style.color = 'var(--primary)';
+            time.textContent = 'Storočia';
+        } else {
+            fill.style.backgroundColor = 'var(--success)';
+            text.textContent = 'Nezlomiteľné 👑';
+            text.style.color = 'var(--success)';
+            time.textContent = 'Milióny rokov';
+        }
+    }
+
+    // Spustiť generátor pri štarte
+    generatePassword();
+</script>
+</body>
+</html>
